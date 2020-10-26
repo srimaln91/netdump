@@ -1,11 +1,7 @@
 package ssh
 
 import (
-	"net"
-	"os"
-
 	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/agent"
 )
 
 type SSHConn struct {
@@ -15,17 +11,13 @@ type SSHConn struct {
 	session *ssh.Session
 }
 
-func (conn *SSHConn) Connect() (err error) {
+type AuthProvider interface {
+	GetClientConfig() *ssh.ClientConfig
+}
 
-	sshConfig := &ssh.ClientConfig{
-		User: "srimal",
-		Auth: []ssh.AuthMethod{
-			SSHAgent(),
-		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-	}
+func (conn *SSHConn) Connect(address string, authProvider AuthProvider) (err error) {
 
-	c, err := ssh.Dial("tcp", "35.247.154.95:22", sshConfig)
+	c, err := ssh.Dial("tcp", address, authProvider.GetClientConfig())
 
 	if err != nil {
 		return
@@ -43,12 +35,6 @@ func (conn *SSHConn) Connect() (err error) {
 	return
 }
 
-func SSHAgent() ssh.AuthMethod {
-	if sshAgent, err := net.Dial("unix", os.Getenv("SSH_AUTH_SOCK")); err == nil {
-		return ssh.PublicKeysCallback(agent.NewClient(sshAgent).Signers)
-	}
-	return nil
-}
 
 func (conn *SSHConn) NewSession() (*Session, error) {
 
