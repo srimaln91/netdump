@@ -1,6 +1,8 @@
 import React from 'react'
-import { LazyLog, ScrollFollow } from 'react-lazylog';
+
 import {Form, Button} from 'react-bootstrap'
+import LoggerComponent from './components/LoggerComponent'
+
 import './App.css';
 function App() {
 
@@ -15,12 +17,9 @@ function App() {
 
             <div class="list-group w-100">
             <Form>
-              <Form.Group controlId="exampleForm.ControlInput1">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="name@example.com" />
-              </Form.Group>
+              
               <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Example select</Form.Label>
+                <Form.Label>Network Interface</Form.Label>
                 <Form.Control as="select">
                   <option>1</option>
                   <option>2</option>
@@ -29,18 +28,12 @@ function App() {
                   <option>5</option>
                 </Form.Control>
               </Form.Group>
-              <Form.Group controlId="exampleForm.ControlSelect2">
-                <Form.Label>Example multiple select</Form.Label>
-                <Form.Control as="select" multiple>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </Form.Control>
+              <Form.Group controlId="exampleForm.ControlInput1">
+                <Form.Label>Pattern</Form.Label>
+                <Form.Control type="text" placeholder="None" />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlTextarea1">
-                <Button variant="primary" class="pull-right">Primary</Button>
+                <Button variant="primary" class="pull-right">Apply</Button>
               </Form.Group>
             </Form>
             </div>
@@ -57,12 +50,7 @@ function App() {
             </div>
             <div class="row bg-white">
                 <div class="col-12 py-4" style={{height:900}}>
-                  <ScrollFollow
-                      startFollowing={true}
-                      render={({ follow, onScroll }) => (
-                        <LazyLog url={url} stream enableSearch follow={follow} onScroll={onScroll} extraLines />
-                      )}
-                    />
+                    <LoggerComponent/>
                 </div>
             </div>
         </main>
