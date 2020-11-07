@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/rs/cors"
 	"github.com/srimaln91/netdump/connection/ssh"
 	"github.com/srimaln91/netdump/connection/ssh/auth"
 )
@@ -50,8 +51,10 @@ func main() {
 	// go io.Copy(os.Stdout, stdout)
 	fmt.Println("Starting writers")
 
+	handler := http.NewServeMux()
+
 	// handle route using handler function
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		go func(){
 			_, err := io.Copy(w, stdout)
@@ -76,5 +79,5 @@ func main() {
 	})
 
 	// listen to port
-	http.ListenAndServe("0.0.0.0:5050", nil)
+	http.ListenAndServe("0.0.0.0:5050", cors.Default().Handler(handler))
 }
